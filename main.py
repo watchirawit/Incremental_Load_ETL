@@ -1,29 +1,44 @@
 import dao
 import pandas as pd
 import employees as emp
-
-
-
-# targetTables = [
-# "REGIONS",
-# "JOBS",
-# "EMPLOYEES",
-# "LOCATIONS",
-# "COUNTRIES",
-# "DEPARTMENTS",
-# "JOB_HISTORY",
-# ]
+import locations 
+import regions
+import departments
+import job_history
+import jobs
+import countries
 
 
 targetTables = [
-# "REGIONS",
-# "JOBS",
-"EMPLOYEES"
-# "LOCATIONS",
-# "COUNTRIES",
-# "DEPARTMENTS",
-# "JOB_HISTORY",
+"REGIONS",
+"JOBS",
+"EMPLOYEES",
+"LOCATIONS",
+"COUNTRIES",
+"DEPARTMENTS",
+"JOB_HISTORY",
 ]
+
+
+# targetTables = [
+# "EMPLOYEES"
+# ]
+
+def truncateTable(tablename):
+    sqlQuery = f"truncate table dbo.ST_{tablename}"
+    sql_server_cnxn = dao.getSourceConnection()
+    sql_server_cursor  = sql_server_cnxn.cursor()
+
+    sql_server_cursor.execute(sqlQuery)
+
+    sql_server_cursor.close()
+
+    sql_server_cnxn.commit()
+    
+    sql_server_cursor.close()
+    sql_server_cnxn.close()
+    print(sqlQuery)
+
 
 
 def fatchRecords(tableName):
@@ -53,10 +68,26 @@ def fatchRecords(tableName):
     sql_server_cnxn.close()
 
 def insertRecoards(tableName):
-    emp.insertIntoEmployees(tableName)
+
+    if (tableName == 'REGIONS'):
+        regions.insertIntoRegions(tableName)
+    elif (tableName == 'JOBS'):
+        jobs.insertIntoJobs(tableName)
+    elif (tableName == 'EMPLOYEES'):
+        emp.insertIntoEmployees(tableName)
+    elif (tableName == 'LOCATIONS'):
+        locations.insertIntoLocations(tableName)
+    elif (tableName == 'COUNTRIES'):
+        countries.insertIntoCountries(tableName)
+    elif (tableName == 'DEPARTMENTS'):
+        departments.insertIntoDepartments(tableName)
+    elif (tableName == 'JOB_HISTORY'):
+        job_history.insertIntoJob_history(tableName)
+
 
 
 for tablename in targetTables:
     #fatchRecords(tablename)
+    truncateTable(tablename)
     insertRecoards(tablename)
     print('Name: ',tablename)
