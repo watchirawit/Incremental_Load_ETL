@@ -19,7 +19,6 @@ def insertIntoJobRunSummary(tableName, start_date_time, end_date_time, rows_proc
                                     ,[error_message]
                                     ,[colid]
                                     ,[job_run_id]
-                                    
                                     )
                             values(?,?,?,?,?,?,?,?)""" 
                             ,tableName, start_date_time, end_date_time, rows_processed, status, error_message, colid, job_run_id
@@ -27,6 +26,7 @@ def insertIntoJobRunSummary(tableName, start_date_time, end_date_time, rows_proc
         
     except Exception as e:
             print(type(str(e)))
+           
     
     sql_server_cnxn.commit()
     sql_server_cursor.close()
